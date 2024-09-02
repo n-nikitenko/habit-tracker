@@ -1,6 +1,7 @@
 from django.db.models import Q
 from django.utils.decorators import method_decorator
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -13,7 +14,7 @@ from habits.serializers import HabitSerializer
 
 @method_decorator(
     name="list",
-    decorator=swagger_auto_schema(operation_description="Получение списка привычек"),
+    decorator=swagger_auto_schema(operation_description="Получение списка привычек авторизованного пользователя"),
 )
 @method_decorator(
     name="create",
@@ -35,10 +36,20 @@ from habits.serializers import HabitSerializer
     name="destroy",
     decorator=swagger_auto_schema(operation_description="Удаление привычки по id"),
 )
+@method_decorator(
+    name="public_list",
+    decorator=swagger_auto_schema(operation_description="Список публичных привычек"),
+)
 class HabitViewSet(ModelViewSet):
     serializer_class = HabitSerializer
     pagination_class = HabitPaginator
     queryset = Habit.objects.all()
+
+    @action(["GET"], url_path=r"publics", name="publics", detail=False)
+    def public_list(self, request):
+        queryset = Habit.objects.filter(is_public=True)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
     def list(self, request):
         # Note the use of `get_queryset()` instead of `self.queryset`
@@ -56,18 +67,14 @@ class HabitViewSet(ModelViewSet):
         serializer.save(author=self.request.user)
 
     def get_permissions(self):
-        if self.action == "create":
+        if self.action in ["create", "update", "delete"]:
             self.permission_classes = (
                 IsAuthenticated,
                 IsAuthorPermission,
             )
-        elif self.action == "destroy":
+        else:
             self.permission_classes = (
                 IsAuthenticated,
-                IsAuthorPermission,
+                IsAuthorPermission | IsPublicPermission,
             )
-        self.permission_classes = (
-            IsAuthenticated,
-            IsAuthorPermission | IsPublicPermission,
-        )
         return super().get_permissions()
