@@ -27,6 +27,13 @@ class HabitTestCase(APITestCase):
             time="по утрам",
             is_pleasant=True,
         )
+        self.public_habit = Habit.objects.create(
+            place="в ресторан",
+            author=self.user2,
+            action="не опаздывать на встречу с друзьями",
+            time="еженедельно",
+            is_public="True"
+        )
 
     def test_habit_retrieve(self):
         url = reverse("habits:habits-detail", args=(self.habit.pk,))
@@ -51,6 +58,16 @@ class HabitTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             len(data.get("results")), Habit.objects.filter(author=self.user).count()
+        )
+
+    def test_habit_public_list(self):
+        url = reverse("habits:habits-publics")
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(url)
+        data = response.json()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            len(data), 1
         )
 
     def test_habit_create(self):
@@ -149,4 +166,4 @@ class HabitTestCase(APITestCase):
         url = reverse("habits:habits-detail", args=(self.habit.pk,))
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(Habit.objects.count(), 1)
+        self.assertEqual(Habit.objects.count(), 2)

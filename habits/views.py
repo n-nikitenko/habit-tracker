@@ -45,15 +45,14 @@ class HabitViewSet(ModelViewSet):
     pagination_class = HabitPaginator
     queryset = Habit.objects.all()
 
-    @action(["GET"], url_path=r"publics", name="publics", detail=False)
+    @action(["GET"], url_path=r"publics", url_name="publics", detail=False)
     def public_list(self, request):
         queryset = Habit.objects.filter(is_public=True)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
     def list(self, request):
-        # Note the use of `get_queryset()` instead of `self.queryset`
-        queryset = Habit.objects.filter(Q(author=self.request.user) | Q(is_public=True))
+        queryset = Habit.objects.filter(author=self.request.user)
 
         page = self.paginate_queryset(queryset)
         if page is not None:
