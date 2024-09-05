@@ -1,7 +1,4 @@
-from django.shortcuts import get_object_or_404
 from rest_framework.serializers import ValidationError
-
-from habits.models import Habit
 
 
 def validate_exec_time(value):

@@ -6,7 +6,7 @@ authors = ["Your Name <you@example.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.8.1"
 django = "4.2"
 psycopg2-binary = "^2.9.9"
 python-dotenv = "^1.0.1"
@@ -16,12 +16,15 @@ djangorestframework-simplejwt = "^5.3.1"
 celery = "^5.4.0"
 redis = "^5.0.8"
 setuptools = "^74.0.0"
+requests = "^2.32.3"
+django-celery-beat = "^2.7.0"
 
 
 [tool.poetry.group.dev.dependencies]
 isort = "^5.13.2"
 black = "^24.8.0"
 coverage = "^7.6.1"
+flake8 = "^7.1.1"
 
 [build-system]
 requires = ["poetry-core"]

@@ -1,7 +1,5 @@
-from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.exceptions import ValidationError
 from rest_framework.test import APITestCase
 
 from habits.models import Habit
@@ -47,7 +45,6 @@ class HabitTestCase(APITestCase):
         url = reverse("habits:habits-detail", args=(self.habit.pk,))
         self.client.force_authenticate(user=self.user2)
         response = self.client.get(url)
-        data = response.json()
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_habit_list(self):
