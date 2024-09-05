@@ -12,5 +12,5 @@ class UserAdmin(admin.ModelAdmin):
         "is_staff",
         "last_login",
         "date_joined",
-        "tg_chat_id"
+        "tg_chat_id",
     )

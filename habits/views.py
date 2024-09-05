@@ -13,7 +13,9 @@ from habits.serializers import HabitSerializer
 
 @method_decorator(
     name="list",
-    decorator=swagger_auto_schema(operation_description="Получение списка привычек авторизованного пользователя"),
+    decorator=swagger_auto_schema(
+        operation_description="Получение списка привычек авторизованного пользователя"
+    ),
 )
 @method_decorator(
     name="create",

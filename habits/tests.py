@@ -30,7 +30,7 @@ class HabitTestCase(APITestCase):
             author=self.user2,
             action="не опаздывать на встречу с друзьями",
             time="еженедельно",
-            is_public="True"
+            is_public="True",
         )
 
     def test_habit_retrieve(self):
@@ -63,9 +63,7 @@ class HabitTestCase(APITestCase):
         response = self.client.get(url)
         data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(
-            len(data), 1
-        )
+        self.assertEqual(len(data), 1)
 
     def test_habit_create(self):
         url = reverse("habits:habits-list")

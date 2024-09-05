@@ -10,4 +10,7 @@ def send_habit_notifications():
     for user in users:
         habits = user.habits.filter(is_pleasant__isnull=True)
         if habits.count():
-            send_telegram_message(user.tg_chat_id, f"Привет, напоминаю о твоих привычках: {', '.join([str(habit) for habit in habits.all()])}.")
+            send_telegram_message(
+                user.tg_chat_id,
+                f"Привет, напоминаю о твоих привычках: {', '.join([str(habit) for habit in habits.all()])}.",
+            )
