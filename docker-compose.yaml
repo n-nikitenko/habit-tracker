@@ -28,7 +28,7 @@ services:
     tty: true
     ports:
       - "8000:8000"
-    command: sh -c "poetry run python manage.py migrate &&  poetry run python manage.py runserver 0.0.0.0:8000"
+    command: sh -c "poetry run python manage.py migrate &&  poetry run python collectstatic && poetry run python manage.py runserver 0.0.0.0:8000"
     depends_on:
       db:
         condition: service_healthy
