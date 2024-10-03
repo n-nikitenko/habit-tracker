@@ -5,7 +5,7 @@ services:
   db:
     image: postgres:12.18-alpine
     restart: on-failure
-    user: "${UID}"
+    user: "${UID}:${GID}"
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -26,7 +26,7 @@ services:
       context: .
       network: host
     restart: on-failure
-    user: "${UID}"
+    user: "${UID}:${GID}"
     tty: true
     ports:
       - "8000:8000"
